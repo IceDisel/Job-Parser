@@ -16,7 +16,7 @@ class AbstractManager(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get(self):
+    def get(self, keywords):
         raise NotImplementedError
 
     @abstractmethod
@@ -41,8 +41,15 @@ class JsonManager(AbstractManager):
         with open(self.path, 'w', encoding='utf-8') as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
 
-    def get(self):
-        pass
+    def get(self, keywords):
+
+        data = self.read()
+        matching_vacancies = [vacancy for vacancy in data if all(keyword in vacancy['name_vacancy']
+                                                                 or (vacancy['requirement']
+                                                                     and keyword in vacancy['requirement']) for keyword
+                                                                 in keywords)]
+
+        return matching_vacancies
 
     def delete(self):
         pass
