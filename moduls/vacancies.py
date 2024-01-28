@@ -1,9 +1,14 @@
+import re
+
+
 class Vacancy:
     def __init__(self, name_vacancy, salary, url, requirement):
         self.__name_vacancy = name_vacancy
         self.__salary = 0 if salary is None else int(salary)
         self.__url = url
-        self.__requirement = requirement
+
+        cleaned_string = re.sub(r'<.*?>', '', str(requirement))
+        self.__requirement = cleaned_string.replace('\n', ' ')
 
     @property
     def name_vacancy(self):
