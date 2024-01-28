@@ -1,4 +1,3 @@
-import json
 import os
 from abc import ABC, abstractmethod
 
@@ -6,32 +5,53 @@ import requests
 
 from dotenv import load_dotenv
 
-from src.config import TOWN
-
 load_dotenv()
 
 
 class AbstractConnector(ABC):
+    """
+    Абстрактный класс для подключения к API вакансий.
+    """
     @abstractmethod
-    def __init__(self, search_text):
+    def __init__(self, search_text: str) -> None:
+        """
+        Абстрактный метод инициализации
+        :param search_text:
+        """
         raise NotImplementedError
 
     @abstractmethod
-    def get_vacancies(self):
+    def get_vacancies(self) -> list[dict]:
+        """
+        Абстрактный метод для получения списка вакансий.
+        :return: Список вакансий
+        """
         raise NotImplementedError
 
 
 class HeadHunterAPI(AbstractConnector):
-    def __init__(self, search_text, area):
-        self.search_text = search_text
-        self.area = area
+    """
+    Класс для работы с API HeadHunter.
+    """
+    def __init__(self, search_text: str, area: int) -> None:
+        """
+        Инициализация полей для API.
+        :param search_text: Ключевые слова для поиска
+        :param area: Код региона
+        """
+        self.__search_text = search_text
+        self.__area = area
 
     def get_vacancies(self):
+        """
+        Получение списка вакансий через API HeadHunter.
+        :return: Список вакансий
+        """
         url = 'https://api.hh.ru/vacancies'
         params = {
-            'text': self.search_text,
+            'text': self.__search_text,
             'search_field': 'name',
-            'area': self.area,
+            'area': self.__area,
             'period': 1,
             'only_with_salary': True,
             'per_page': 100,
@@ -45,12 +65,24 @@ class HeadHunterAPI(AbstractConnector):
 
 
 class SuperJobAPI(AbstractConnector):
-    def __init__(self, search_text, town):
+    """
+    Класс для работы с API SuperJob.
+    """
+    def __init__(self, search_text: str, town: int) -> None:
+        """
+        Инициализация полей для API.
+        :param search_text: Ключевые слова для поиска
+        :param town: Код региона
+        """
         self.sj_token = os.getenv('SJ_TOKEN')
         self.search_text = search_text
         self.town = town
 
     def get_vacancies(self):
+        """
+        Получение списка вакансий через API SuperJob.
+        :return: Список вакансий
+        """
         url = 'https://api.superjob.ru/2.0/vacancies/'
         headers = {
             'X-Api-App-Id': self.sj_token,
