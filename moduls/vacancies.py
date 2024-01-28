@@ -5,6 +5,8 @@ class Vacancy:
     """
     Класс для представления вакансии.
     """
+    __slots__ = ('__name_vacancy', '__salary', '__url', '__requirement')
+
     def __init__(self, name_vacancy: str, salary: str, url: str, requirement: str) -> None:
         """
         Инициализация объекта вакансии.
