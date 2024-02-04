@@ -44,3 +44,25 @@ python main.py
 
 ### Цель проекта
 Код написан в образовательных целях
+
+
+## Тестирование проекта
+```text
+---------- coverage: platform win32, python 3.10.9-final-0 -----------
+Name                          Stmts   Miss  Cover                     
+-------------------------------------------------                     
+moduls\__init__.py                0      0   100%
+moduls\api_connector.py          34      2    94%
+moduls\file_manager.py           40      7    82%
+moduls\vacancies.py              27      0   100%
+src\__init__.py                   0      0   100%
+src\config.py                     4      0   100%
+src\utils.py                     51      0   100%
+tests\__init__.py                 0      0   100%
+tests\test_api_connector.py      20      0   100%
+tests\test_utils.py              47      0   100%
+tests\test_vacancies.py          18      0   100%
+-------------------------------------------------
+TOTAL                           241      9    96%
+
+```
