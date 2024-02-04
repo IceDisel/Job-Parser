@@ -4,6 +4,39 @@ from moduls.vacancies import Vacancy
 from src.config import AREA, TOWN
 
 
+def search_hh(query_hh: str) -> list[Vacancy]:
+    """
+    Функция поиска вакансий на HH.ru
+    :param query_hh: Поисковый запрос.
+    :return: Список найденных вакансий.
+    """
+    hh_api = HeadHunterAPI(query_hh, AREA)
+    data_hh = hh_api.get_vacancies()
+
+    list_hh = []
+
+    for item in data_hh:
+        list_hh.append(
+            Vacancy(item['name'], item['salary']['from'], item['alternate_url'], item['snippet']['requirement']))
+    return list_hh
+
+
+def search_sj(query_sj: str) -> list[Vacancy]:
+    """
+    Функция поиска вакансий на SuperJob.ru
+    :param query_sj: Поисковый запрос.
+    :return: Список найденных вакансий.
+    """
+    sj_api = SuperJobAPI(query_sj, TOWN)
+    data_sj = sj_api.get_vacancies()
+
+    list_sj = []
+
+    for item in data_sj:
+        list_sj.append(Vacancy(item['profession'], item['payment_from'], item['link'], item['candidat']))
+    return list_sj
+
+
 def search_vacancy(query: str, mode: int) -> list[Vacancy]:
     """
     Поиск вакансий в соответствии с режимом.
@@ -11,26 +44,6 @@ def search_vacancy(query: str, mode: int) -> list[Vacancy]:
     :param mode: Режим поиска (1 - HeadHunter, 2 - SuperJob, 3 - оба).
     :return: Список найденных вакансий.
     """
-    def search_hh(query_hh: str) -> list[Vacancy]:
-        hh_api = HeadHunterAPI(query_hh, AREA)
-        data_hh = hh_api.get_vacancies()
-
-        list_hh = []
-
-        for item in data_hh:
-            list_hh.append(
-                Vacancy(item['name'], item['salary']['from'], item['alternate_url'], item['snippet']['requirement']))
-        return list_hh
-
-    def search_sj(query_sj: str) -> list[Vacancy]:
-        sj_api = SuperJobAPI(query_sj, TOWN)
-        data_sj = sj_api.get_vacancies()
-
-        list_sj = []
-
-        for item in data_sj:
-            list_sj.append(Vacancy(item['profession'], item['payment_from'], item['link'], item['candidat']))
-        return list_sj
 
     if mode == 1:
         list_vacancies = search_hh(query)
